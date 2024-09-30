@@ -18,10 +18,10 @@ public class UserService implements UserServicePort {
 
     private static final String LOG_LEVEL = "INFO";
 
-    private UserRepositoryPort userRepository;
-    private FriendRepositoryPort friendRepository;
-    private AvatarResourcePort avatarResource;
-    private LoggerPort logger;
+    private final UserRepositoryPort userRepository;
+    private final FriendRepositoryPort friendRepository;
+    private final AvatarResourcePort avatarResource;
+    private final LoggerPort logger;
 
     public UserService(
             UserRepositoryPort userRepositoryPort,
@@ -41,6 +41,7 @@ public class UserService implements UserServicePort {
 
     @Override
     public User addUser(User user) {
+        // TODO: do refactoring of avatar updating field
         User savedUser = userRepository.save(user);
         addAvatarExistingUser(savedUser);
         return userRepository.save(user);
@@ -98,6 +99,7 @@ public class UserService implements UserServicePort {
     private String findAvatar(Long userId) {
         try {
             String avatarUrl = avatarResource.findAvatarUrl(userId);
+            logger.log(LOG_LEVEL, avatarUrl);
             return avatarUrl;
         } catch (Exception e) {
             logger.log(LOG_LEVEL, "It was not possible to find the avatar");

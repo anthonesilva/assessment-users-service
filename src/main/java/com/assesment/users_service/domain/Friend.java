@@ -5,7 +5,6 @@ public class Friend {
     private Long id;
     private String firstName;
     private String lastName;
-    private User user;
     
     public Friend() {}
 
@@ -18,12 +17,6 @@ public class Friend {
     public Friend(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    public Friend(String firstName, String lastName, User user) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.user = user;
     }
 
     public Long getId() {
@@ -50,14 +43,6 @@ public class Friend {
         this.lastName = lastName;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -65,7 +50,6 @@ public class Friend {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((user == null) ? 0 : user.hashCode());
         return result;
     }
 
@@ -93,17 +77,12 @@ public class Friend {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (user == null) {
-            if (other.user != null)
-                return false;
-        } else if (!user.equals(other.user))
-            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Friend [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", user=" + user + "]";
+        return "Friend [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
     }
        
 }

@@ -87,25 +87,23 @@ public class User {
         this.avatar = avatar;
     }
 
-    public List<Friend> getFriend() {
+    public List<Friend> getFriends() {
         return friends;
     }
 
-    public void setFriend(List<Friend> friends) {
+    public void setFriends(List<Friend> friends) {
         this.friends = friends;
     }
 
     public void addFriend(Friend friend) {
         if (!friends.contains(friend)) {
             friends.add(friend);
-            friend.setUser(this);
         }
     }
 
     public void removeFriend(Friend friend) {
         if (friends.contains(friend)) {
             friends.remove(friend);
-            friend.setUser(null);
         }
     }
 
