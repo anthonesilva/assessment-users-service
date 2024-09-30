@@ -1,4 +1,4 @@
-package com.assesment.users_service.domain;
+package com.assesment.users_service.application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,13 +22,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.assesment.users_service.application.services.UserService;
+import com.assesment.users_service.domain.Friend;
+import com.assesment.users_service.domain.User;
 import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
 import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
 
 @SpringBootTest
-// @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
@@ -53,9 +54,9 @@ public class UserServiceTest {
     @Test
     @DisplayName("Given no users in DB, when finding all users, then should return an empty list")
     public void whenFindingAll_shouldReturnEmpty() {
-        
+
         List<User> allUsers = userService.findAll();
-        
+
         verify(userRepository, times(1)).findAll();
         assertTrue(allUsers.isEmpty());
     }
@@ -75,11 +76,13 @@ public class UserServiceTest {
     @DisplayName("Given user no present in DB, when adding new user, then should return the user added")
     public void whenAddingUser_shouldReturnNewUser() throws Exception {
         List<Friend> friends = List.of(new Friend("firstName", "lastName"));
-        User user = new User(1L, "test@test.com", "firstName", "lastName", "http://avatar-url.com", friends);
-        when(userRepository.save(any())).thenReturn(user);
+        User user = new User(1L, "test@test.com", "firstName", "lastName", null, friends);
+        User userUpdated = new User(1L, "test@test.com", "firstName", "lastName", "http://avatar-url.com", friends);
+
+        when(userRepository.save(any())).thenReturn(userUpdated);
         when(avatarResource.findAvatarUrl(any())).thenReturn("http://avatar-url.com");
 
-        User savedUser = userService.addUser(any());
+        User savedUser = userService.addUser(user);
 
         verify(userRepository, atLeastOnce()).save(any());
         verify(avatarResource, atLeastOnce()).findAvatarUrl(any());
@@ -90,7 +93,8 @@ public class UserServiceTest {
     @Test
     @DisplayName("Given existing user, when adding new friend, then should return the updated user with new friend")
     public void whenAddingFriendExistingUser_shouldReturnUpdatedUser() throws Exception {
-        List<Friend> friends = new ArrayList<>(Arrays.asList(new Friend("firstName", "lastName"), new Friend("firstName1", "lastName1")));
+        List<Friend> friends = new ArrayList<>(
+                Arrays.asList(new Friend("firstName", "lastName"), new Friend("firstName1", "lastName1")));
         User user = new User(1L, "test@test.com", "firstName", "lastName", "http://avatar-url.com", friends);
         when(userRepository.save(any())).thenReturn(user);
         when(userRepository.findById(any())).thenReturn(user);
@@ -201,6 +205,5 @@ public class UserServiceTest {
         List<User> users = Arrays.asList(user);
         return users;
     }
-
 
 }

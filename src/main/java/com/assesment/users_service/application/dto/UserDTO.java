@@ -2,7 +2,9 @@ package com.assesment.users_service.application.dto;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -33,6 +35,7 @@ public class UserDTO {
     private String avatar;
 
     @JsonProperty("friends")
+    @JsonInclude(Include.NON_NULL)
     private List<FriendDTO> friends;
 
 }

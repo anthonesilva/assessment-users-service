@@ -56,9 +56,11 @@ public class UserEntity {
         user.setFirstName(this.firstName);
         user.setLastName(this.lastName);
         user.setAvatar(this.avatar);
-        user.setFriends(this.friends.stream()
-                .map(FriendEntity::toDomain)
-                .collect(Collectors.toList()));
+        if (this.friends != null) {
+            user.setFriends(this.friends.stream()
+                    .map(FriendEntity::toDomain)
+                    .collect(Collectors.toList()));
+        }
         return user;
     }
 
@@ -69,9 +71,11 @@ public class UserEntity {
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
         userEntity.setAvatar(user.getAvatar());
-        userEntity.setFriends(user.getFriends().stream()
-                .map(FriendEntity::fromDomain)
-                .collect(Collectors.toList()));
+        if (user.getFriends() != null) {
+            userEntity.setFriends(user.getFriends().stream()
+                    .map(FriendEntity::fromDomain)
+                    .collect(Collectors.toList()));
+        }
         return userEntity;
     }
 

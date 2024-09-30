@@ -11,7 +11,7 @@ import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
 import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
-
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 
@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 public class UserService implements UsersUseCase {
 
     private static final String LOG_LEVEL = "INFO";
+    private static final String DEFAULT_AVATAR = "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png";
 
     private final UserRepositoryPort userRepository;
     private final FriendRepositoryPort friendRepository;
@@ -35,10 +36,12 @@ public class UserService implements UsersUseCase {
     }
 
     @Override
+    @Transactional
     public User addUser(User user) {
         User savedUser = userRepository.save(user);
-        addAvatarExistingUser(savedUser);
-        return userRepository.save(user);
+        String avatar = findAvatar(savedUser.getId());
+        savedUser.setAvatar(avatar);
+        return userRepository.save(savedUser);
     }    
 
     @Override
@@ -85,20 +88,14 @@ public class UserService implements UsersUseCase {
         return userRepository.save(user);
     }
 
-    private void addAvatarExistingUser(User user) {
-        String avatarUrl = findAvatar(user.getId());
-        user.setAvatar(avatarUrl);
-    }
-
     private String findAvatar(Long userId) {
-        try {
-            String avatarUrl = avatarResource.findAvatarUrl(userId);
-            logger.log(LOG_LEVEL, avatarUrl);
-            return avatarUrl;
-        } catch (Exception e) {
-            logger.log(LOG_LEVEL, "It was not possible to find the avatar");
+        String avatarUrl = avatarResource.findAvatarUrl(userId);
+        
+        if (avatarUrl == null) {
+            logger.log(LOG_LEVEL, String.format("[findAvatar] It has not been possible to find the avatar for user ID: %s", userId));
+            avatarUrl = DEFAULT_AVATAR;
         }
-        return null;
+        return avatarUrl;
     }
 
 }

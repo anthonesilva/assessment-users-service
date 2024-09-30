@@ -46,8 +46,8 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public User findById(Long userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        UserEntity userEntity = userRepository.findById(userId).get();
+        return userEntity.toDomain();        
     }
 
     @Override
