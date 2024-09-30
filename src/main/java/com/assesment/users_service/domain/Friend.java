@@ -1,10 +1,13 @@
 package com.assesment.users_service.domain;
 
+import java.util.Objects;
+
 public class Friend {
 
     private Long id;
     private String firstName;
     private String lastName;
+    private User user;
     
     public Friend() {}
 
@@ -43,46 +46,58 @@ public class Friend {
         this.lastName = lastName;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        return result;
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.firstName);
+        hash = 59 * hash + Objects.hashCode(this.lastName);
+        hash = 59 * hash + Objects.hashCode(this.user);
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        Friend other = (Friend) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
+        }
+        final Friend other = (Friend) obj;
+        if (!Objects.equals(this.firstName, other.firstName)) {
             return false;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
             return false;
-        if (lastName == null) {
-            if (other.lastName != null)
-                return false;
-        } else if (!lastName.equals(other.lastName))
+        }
+        if (!Objects.equals(this.id, other.id)) {
             return false;
-        return true;
+        }
+        return Objects.equals(this.user, other.user);
     }
 
     @Override
     public String toString() {
-        return "Friend [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Friend{");
+        sb.append("id=").append(id);
+        sb.append(", firstName=").append(firstName);
+        sb.append(", lastName=").append(lastName);
+        sb.append(", user=").append(user);
+        sb.append('}');
+        return sb.toString();
     }
-       
+      
 }

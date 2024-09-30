@@ -1,20 +1,26 @@
-package com.assesment.users_service.domain.services;
+package com.assesment.users_service.application.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.User;
-import com.assesment.users_service.domain.ports.in.UserServicePort;
+import com.assesment.users_service.domain.ports.in.UsersUseCase;
 import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
 import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
 
+import lombok.AllArgsConstructor;
+
 
 // TODO: do refactoring using Optional
 // TODO: handle exceptions properly
 // TODO: better usage of jpa repository methods
-public class UserService implements UserServicePort {
+@Service
+@AllArgsConstructor
+public class UserService implements UsersUseCase {
 
     private static final String LOG_LEVEL = "INFO";
 
@@ -23,17 +29,6 @@ public class UserService implements UserServicePort {
     private final AvatarResourcePort avatarResource;
     private final LoggerPort logger;
 
-    public UserService(
-            UserRepositoryPort userRepositoryPort,
-            FriendRepositoryPort friendRepositoryPort,
-            AvatarResourcePort avatarResourcePort,
-            LoggerPort loggerPort) {
-        this.userRepository = userRepositoryPort;
-        this.friendRepository = friendRepositoryPort;
-        this.avatarResource = avatarResourcePort;
-        this.logger = loggerPort;
-    }
-
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
@@ -41,7 +36,6 @@ public class UserService implements UserServicePort {
 
     @Override
     public User addUser(User user) {
-        // TODO: do refactoring of avatar updating field
         User savedUser = userRepository.save(user);
         addAvatarExistingUser(savedUser);
         return userRepository.save(user);

@@ -2,6 +2,7 @@ package com.assesment.users_service.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
 
@@ -107,67 +108,60 @@ public class User {
         }
     }
 
-
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((avatar == null) ? 0 : avatar.hashCode());
-        result = prime * result + ((friends == null) ? 0 : friends.hashCode());
-        return result;
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.email);
+        hash = 53 * hash + Objects.hashCode(this.firstName);
+        hash = 53 * hash + Objects.hashCode(this.lastName);
+        hash = 53 * hash + Objects.hashCode(this.avatar);
+        hash = 53 * hash + Objects.hashCode(this.friends);
+        return hash;
     }
-
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        User other = (User) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.email, other.email)) {
             return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
+        }
+        if (!Objects.equals(this.firstName, other.firstName)) {
             return false;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
             return false;
-        if (lastName == null) {
-            if (other.lastName != null)
-                return false;
-        } else if (!lastName.equals(other.lastName))
+        }
+        if (!Objects.equals(this.avatar, other.avatar)) {
             return false;
-        if (avatar == null) {
-            if (other.avatar != null)
-                return false;
-        } else if (!avatar.equals(other.avatar))
+        }
+        if (!Objects.equals(this.id, other.id)) {
             return false;
-        if (friends == null) {
-            if (other.friends != null)
-                return false;
-        } else if (!friends.equals(other.friends))
-            return false;
-        return true;
+        }
+        return Objects.equals(this.friends, other.friends);
     }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", avatar=" + avatar + ", friends=" + friends + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("User{");
+        sb.append("id=").append(id);
+        sb.append(", email=").append(email);
+        sb.append(", firstName=").append(firstName);
+        sb.append(", lastName=").append(lastName);
+        sb.append(", avatar=").append(avatar);
+        sb.append(", friends=").append(friends);
+        sb.append('}');
+        return sb.toString();
     }
 
 }

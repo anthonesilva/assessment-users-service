@@ -3,7 +3,6 @@ package com.assesment.users_service.infra.repositories;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.assesment.users_service.domain.User;
@@ -17,13 +16,12 @@ import lombok.AllArgsConstructor;
 public class UserRepositoryAdapter implements UserRepositoryPort {
 
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public User save(User user) {
-        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+        UserEntity userEntity = UserEntity.fromDomain(user);
         UserEntity savedEntity = userRepository.save(userEntity);
-        return modelMapper.map(savedEntity, User.class);
+        return savedEntity.toDomain();
     }
 
     @Override
@@ -40,8 +38,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll()
-                .stream().map(userRepositoryEntity -> modelMapper.map(userRepositoryEntity, User.class))
+        List<UserEntity> allUsers = userRepository.findAll();
+        return allUsers.stream()
+                .map(UserEntity::toDomain)
                 .collect(Collectors.toList());
     }
 

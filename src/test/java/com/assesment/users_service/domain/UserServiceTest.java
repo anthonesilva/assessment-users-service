@@ -21,13 +21,14 @@ import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.assesment.users_service.application.services.UserService;
 import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
 import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
-import com.assesment.users_service.domain.services.UserService;
 
 @SpringBootTest
+// @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
@@ -52,6 +53,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("Given no users in DB, when finding all users, then should return an empty list")
     public void whenFindingAll_shouldReturnEmpty() {
+        
         List<User> allUsers = userService.findAll();
         
         verify(userRepository, times(1)).findAll();
@@ -75,13 +77,11 @@ public class UserServiceTest {
         List<Friend> friends = List.of(new Friend("firstName", "lastName"));
         User user = new User(1L, "test@test.com", "firstName", "lastName", "http://avatar-url.com", friends);
         when(userRepository.save(any())).thenReturn(user);
-        when(userRepository.updateAvatar(any())).thenReturn(user);
         when(avatarResource.findAvatarUrl(any())).thenReturn("http://avatar-url.com");
 
         User savedUser = userService.addUser(any());
 
         verify(userRepository, atLeastOnce()).save(any());
-        verify(userRepository, atLeastOnce()).saveAndFlush(any());
         verify(avatarResource, atLeastOnce()).findAvatarUrl(any());
         assertNotNull(savedUser);
         assertFalse(savedUser.getAvatar().isEmpty());
@@ -198,7 +198,7 @@ public class UserServiceTest {
 
     public List<User> listUsersMock() {
         User user = new User(1L, "test@test.com", "firstName", "lastName", "url");
-        List<User> users = List.of(user);
+        List<User> users = Arrays.asList(user);
         return users;
     }
 

@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.assesment.users_service.application.dto.UserDTO;
 import com.assesment.users_service.domain.User;
-import com.assesment.users_service.domain.ports.in.UserServicePort;
+import com.assesment.users_service.domain.ports.in.UsersUseCase;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -24,13 +24,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserServicePort userService;
+    private final UsersUseCase usersUseCase;
 
     private final ModelMapper modelMapper;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
-        List<UserDTO> allUsers = userService.findAll()
+        List<UserDTO> allUsers = usersUseCase.findAll()
                 .stream()
                 .map(userDomainEntity -> modelMapper.map(userDomainEntity, UserDTO.class))
                 .collect(Collectors.toList());
@@ -42,7 +42,7 @@ public class UserController {
     public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO user) {
         User userDomainEntity = modelMapper.map(user, User.class);
 
-        UserDTO savedUser = modelMapper.map(userService.addUser(userDomainEntity), UserDTO.class);
+        UserDTO savedUser = modelMapper.map(usersUseCase.addUser(userDomainEntity), UserDTO.class);
 
         return ResponseEntity
                 .created(UriComponentsBuilder.fromPath("/users/{id}").buildAndExpand(savedUser.getId()).toUri())

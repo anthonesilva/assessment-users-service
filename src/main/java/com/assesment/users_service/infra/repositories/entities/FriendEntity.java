@@ -1,5 +1,10 @@
 package com.assesment.users_service.infra.repositories.entities;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.assesment.users_service.domain.Friend;
+
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,4 +42,15 @@ public class FriendEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Autowired
+    private static ModelMapper modelMapper;
+
+    public Friend toDomain() {
+        return modelMapper.map(this, Friend.class);
+    }
+
+    public static FriendEntity fromDomain(Friend friend) {
+        return modelMapper.map(friend, FriendEntity.class);
+    }
 }

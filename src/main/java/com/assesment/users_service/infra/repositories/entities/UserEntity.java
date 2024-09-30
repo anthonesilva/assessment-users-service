@@ -1,6 +1,11 @@
 package com.assesment.users_service.infra.repositories.entities;
 
-import java.util.Set;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.assesment.users_service.domain.User;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
@@ -44,6 +49,17 @@ public class UserEntity {
     private String avatar;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<FriendEntity> friends;
+    private List<FriendEntity> friends;
+
+    @Autowired
+    private static ModelMapper modelMapper;
+
+    public User toDomain() {
+        return modelMapper.map(this, User.class);
+    }
+
+    public static UserEntity fromDomain(User user) {
+        return modelMapper.map(user, UserEntity.class);
+    }
 
 }

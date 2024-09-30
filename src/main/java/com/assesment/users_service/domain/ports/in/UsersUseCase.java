@@ -5,7 +5,7 @@ import java.util.List;
 import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.User;
 
-public interface UserServicePort {
+public interface UsersUseCase {
 
     User addUser(User user);
 
