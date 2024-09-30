@@ -1,8 +1,5 @@
 package com.assesment.users_service.infra.repositories.entities;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.assesment.users_service.domain.Friend;
 
 import jakarta.annotation.Nonnull;
@@ -43,14 +40,21 @@ public class FriendEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @Autowired
-    private static ModelMapper modelMapper;
-
     public Friend toDomain() {
-        return modelMapper.map(this, Friend.class);
+        Friend friend = new Friend();
+        friend.setId(this.id);
+        friend.setFirstName(this.firstName);
+        friend.setLastName(this.lastName);
+        friend.setUser(this.user.toDomain());
+        return friend;
     }
 
     public static FriendEntity fromDomain(Friend friend) {
-        return modelMapper.map(friend, FriendEntity.class);
+        FriendEntity friendEntity = new FriendEntity();
+        friendEntity.setId(friend.getId());
+        friendEntity.setFirstName(friend.getFirstName());
+        friendEntity.setLastName(friend.getLastName());
+        friendEntity.setUser(UserEntity.fromDomain(friend.getUser()));
+        return friendEntity;
     }
 }

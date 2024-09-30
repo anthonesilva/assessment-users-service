@@ -1,9 +1,7 @@
 package com.assesment.users_service.infra.repositories.entities;
 
 import java.util.List;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.stream.Collectors;
 
 import com.assesment.users_service.domain.User;
 
@@ -51,15 +49,30 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FriendEntity> friends;
 
-    @Autowired
-    private static ModelMapper modelMapper;
-
     public User toDomain() {
-        return modelMapper.map(this, User.class);
+        User user = new User();
+        user.setId(this.id);
+        user.setEmail(this.email);
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
+        user.setAvatar(this.avatar);
+        user.setFriends(this.friends.stream()
+                .map(FriendEntity::toDomain)
+                .collect(Collectors.toList()));
+        return user;
     }
 
     public static UserEntity fromDomain(User user) {
-        return modelMapper.map(user, UserEntity.class);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(user.getId());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+        userEntity.setAvatar(user.getAvatar());
+        userEntity.setFriends(user.getFriends().stream()
+                .map(FriendEntity::fromDomain)
+                .collect(Collectors.toList()));
+        return userEntity;
     }
 
 }
