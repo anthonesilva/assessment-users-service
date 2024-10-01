@@ -12,6 +12,7 @@ import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
 import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
+
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -64,11 +65,7 @@ public class UserService implements UsersUseCase {
 
     @Override
     public void deleteById(Long userId) {
-        try {
-            userRepository.deleteById(userId);
-        } catch (Exception e) {
-            throw e;
-        }
+        userRepository.deleteById(userId);
     }
 
     @Override

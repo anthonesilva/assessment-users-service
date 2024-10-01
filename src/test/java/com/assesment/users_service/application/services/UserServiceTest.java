@@ -1,4 +1,4 @@
-package com.assesment.users_service.application;
+package com.assesment.users_service.application.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,13 +13,14 @@ import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import com.assesment.users_service.application.services.UserService;
 import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.User;
 import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
@@ -28,6 +29,7 @@ import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
 
 @SpringBootTest
+@ActiveProfiles("local")
 public class UserServiceTest {
 
     @Mock
@@ -105,23 +107,21 @@ public class UserServiceTest {
         assertFalse(savedUser.getFriends().isEmpty());
     }
 
-    // @Test
-    // @DisplayName("Given existing user, when removing friend, then should return the updated user without removed friend")
-    // public void whenRemovingFriendExistingUser_shouldReturnUpdatedUser() throws Exception {
-    //     Friend friend = new Friend("firstName", "lastName");
-    //     List<Friend> friends = new ArrayList<>(Arrays.asList(friend));
-    //     User user = new User(1L, "test@test.com", "firstName", "lastName", "http://avatar-url.com", friends);
-    //     when(userRepository.save(any())).thenReturn(mock(User.class));
-    //     when(userRepository.findById(any())).thenReturn(user);
+    @Test
+    @DisplayName("Given existing user, when removing friend, then should update user and remove friend")
+    public void whenRemovingFriendExistingUser_shouldUpdatedUser() throws Exception {
+        Friend friend1 = new Friend(1L, "firstName", "lastName");
+        Friend friend2 = new Friend(2L, "firstName", "lastName");
+        User user = new User(1L, "test@test.com", "firstName", "lastName", "http://avatar-url.com", Arrays.asList(friend1, friend2));
+        when(userRepository.save(any())).thenReturn(mock(User.class));
+        when(userRepository.findById(any())).thenReturn(user);
 
-    //     User savedUser = userService.removeFriend(1L, any());
+        userService.removeFriendFromUser(1L, 2L);
 
-    //     verify(userRepository, atLeastOnce()).findById(any());
-    //     verify(userRepository, atLeastOnce()).save(any());
-    //     verify(friendRepository, atLeastOnce()).deleteById(any());
-    //     assertNotNull(savedUser);
-    //     assertTrue(savedUser.getFriends().isEmpty());
-    // }
+        verify(userRepository, atLeastOnce()).findById(any());
+        verify(userRepository, atLeastOnce()).save(any());
+        verify(friendRepository, atLeastOnce()).deleteById(any());
+    }
 
     @Test
     @DisplayName("Given user present in DB, when requesting by ID, then should return the user")
@@ -142,13 +142,6 @@ public class UserServiceTest {
         userService.deleteById(1L);
         verify(userRepository, atLeastOnce()).deleteById(any());
     }
-
-    // @Test
-    // @DisplayName("Given non-existing user, when deleting by ID, then should raise exception")
-    // public void whenDeletingById_shouldReturnNull() {
-    //     userService.deleteById(1L);
-    //     verify(userRepository, times(0)).deleteById(any());
-    // }
 
     @Test
     @DisplayName("Given user present in DB, when updating entity, then should return the updated user")

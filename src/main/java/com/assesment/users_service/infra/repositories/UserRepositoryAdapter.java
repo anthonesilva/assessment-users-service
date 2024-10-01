@@ -76,7 +76,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
             UserEntity userEntity = entity.get();
             return userEntity.toDomain();
         } else {
-            throw new IllegalArgumentException("User has not be found.");
+            throw new EntityNotFoundException("User has not be found.");
         }
 
     }
@@ -86,7 +86,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
         } else {
-            throw new IllegalArgumentException("Targeted entity has not be found for deletion.");
+            throw new EntityNotFoundException("Targeted entity has not be found for deletion.");
         }
     }
 

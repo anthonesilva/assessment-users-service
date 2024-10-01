@@ -13,7 +13,13 @@ import jakarta.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({HttpMessageConversionException.class, MethodArgumentNotValidException.class, IllegalArgumentException.class, EntityNotFoundException.class})
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity<?> handleEntityNotFoundException(Exception ex, WebRequest request) {
+        CustomError customError = new CustomError(ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(customError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({HttpMessageConversionException.class, MethodArgumentNotValidException.class, IllegalArgumentException.class})
     public ResponseEntity<?> handleParsingException(Exception ex, WebRequest request) {
         CustomError customError = new CustomError(ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(customError, HttpStatus.BAD_REQUEST);
