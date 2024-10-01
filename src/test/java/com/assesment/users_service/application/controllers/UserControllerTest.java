@@ -76,6 +76,15 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Given existing users in application, when finding by identifier, then should return success")
+    void whenFindingOnlyUserByIdentifier_shouldReturnSucess() throws Exception {
+        given(useCaseMock.findById(1L)).willReturn(listUsersMock().get(0));
+
+        mockMvc.perform(get(USER_RESOURCE.concat("/1")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("Given creating valid user, when it is created, then should return created")
     void whenCreatingUser_shouldReturnCreated() throws Exception {
         UserDTO userInput = UserDTO.builder().email("test@test.com").firstName("firstName").lastName("lastName").build();

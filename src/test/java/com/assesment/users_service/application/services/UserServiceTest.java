@@ -25,7 +25,6 @@ import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.User;
 import com.assesment.users_service.domain.ports.out.AvatarResourcePort;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
-import com.assesment.users_service.domain.ports.out.LoggerPort;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
 
 @SpringBootTest
@@ -40,9 +39,6 @@ public class UserServiceTest {
 
     @Mock
     private AvatarResourcePort avatarResource;
-
-    @Mock
-    private LoggerPort logger;
 
     @InjectMocks
     private UserService userService;

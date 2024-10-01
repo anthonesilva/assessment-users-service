@@ -66,6 +66,21 @@ public class UserController {
                 return ResponseEntity.ok(allUsers);
         }
 
+        @GetMapping("{id}")
+        @Operation(summary = "Finds an existing user by identifier", description = "Resource where a single registered user in the application will be retrieved", tags = {
+                        "users", "get" })
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", content = {
+                                        @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json") }),
+                        @ApiResponse(responseCode = "404", description = "Resource not found", content = {
+                                        @Content(schema = @Schema(implementation = CustomError.class), mediaType = "application/json") })
+        })
+        public ResponseEntity<UserDTO> findUserById(
+                        @Parameter(description = "Existing user identifier") @PathVariable Long id) {
+                UserDTO existingUser = modelMapper.map(usersUseCase.findById(id), UserDTO.class);
+                return new ResponseEntity<>(existingUser, HttpStatus.OK);
+        }
+
         @PostMapping
         @Operation(summary = "Creates users and friends list", description = "Resource where it is possible to create only users or users and list of friends", tags = {
                         "users", "post" })
@@ -101,7 +116,8 @@ public class UserController {
                         @ApiResponse(responseCode = "500", description = "Internal server error", content = {
                                         @Content(schema = @Schema(implementation = CustomError.class), mediaType = "application/json") })
         })
-        public ResponseEntity<UserDTO> updateEntity(@Parameter(description = "Existing user ID") @PathVariable Long id,
+        public ResponseEntity<UserDTO> updateEntity(
+                        @Parameter(description = "Existing user identifier") @PathVariable Long id,
                         @Parameter(description = "User patch request body") @RequestBody UserPatchDTO user) {
                 User userDomainEntity = modelMapper.map(user, User.class);
 
@@ -121,7 +137,8 @@ public class UserController {
                         @ApiResponse(responseCode = "500", description = "Internal server error", content = {
                                         @Content(schema = @Schema(implementation = CustomError.class), mediaType = "application/json") })
         })
-        public ResponseEntity<UserDTO> addFriend(@Parameter(description = "Existing user ID") @PathVariable Long id,
+        public ResponseEntity<UserDTO> addFriend(
+                        @Parameter(description = "Existing user identifier") @PathVariable Long id,
                         @Parameter(description = "Friend request body to be added") @Valid @RequestBody FriendDTO friend)
                         throws Exception {
                 Friend friendDomainEntity = modelMapper.map(friend, Friend.class);
@@ -145,7 +162,7 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "Resource not found", content = {
                                         @Content(schema = @Schema(implementation = CustomError.class), mediaType = "application/json") })
         })
-        public void deleteById(@Parameter(description = "Existing user ID") @PathVariable Long id) {
+        public void deleteById(@Parameter(description = "Existing user identifier") @PathVariable Long id) {
                 usersUseCase.deleteById(id);
         }
 
@@ -159,8 +176,9 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "Resource not found", content = {
                                         @Content(schema = @Schema(implementation = CustomError.class), mediaType = "application/json") })
         })
-        public void removeFriend(@Parameter(description = "Existing user ID") @PathVariable Long id,
-                        @Parameter(description = "Existing friend ID") @PathVariable Long friendId) throws Exception {
+        public void removeFriend(@Parameter(description = "Existing user identifier") @PathVariable Long id,
+                        @Parameter(description = "Existing friend identifier") @PathVariable Long friendId)
+                        throws Exception {
                 usersUseCase.removeFriendFromUser(id, friendId);
         }
 
