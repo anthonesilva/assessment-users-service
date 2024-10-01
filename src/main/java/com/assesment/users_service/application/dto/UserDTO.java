@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,6 @@ public class UserDTO {
 
     @JsonProperty("friends")
     @JsonInclude(Include.NON_NULL)
-    private List<FriendDTO> friends;
+    private List<@Valid FriendDTO> friends;
 
 }
