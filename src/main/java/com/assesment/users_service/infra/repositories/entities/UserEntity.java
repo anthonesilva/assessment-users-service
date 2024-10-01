@@ -66,11 +66,11 @@ public class UserEntity {
 
     public static UserEntity fromDomain(User user) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(user.getId());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setFirstName(user.getFirstName());
-        userEntity.setLastName(user.getLastName());
-        userEntity.setAvatar(user.getAvatar());
+        if (user.getId() != null) userEntity.setId(user.getId());
+        if (user.getEmail() != null) userEntity.setEmail(user.getEmail());
+        if (user.getFirstName() != null) userEntity.setFirstName(user.getFirstName());
+        if (user.getLastName() != null) userEntity.setLastName(user.getLastName());
+        if (user.getAvatar() != null) userEntity.setAvatar(user.getAvatar());
         if (user.getFriends() != null) {
             userEntity.setFriends(user.getFriends().stream()
                     .map(FriendEntity::fromDomain)

@@ -45,16 +45,15 @@ public class FriendEntity {
         friend.setId(this.id);
         friend.setFirstName(this.firstName);
         friend.setLastName(this.lastName);
-        friend.setUser(this.user.toDomain());
         return friend;
     }
 
     public static FriendEntity fromDomain(Friend friend) {
         FriendEntity friendEntity = new FriendEntity();
-        friendEntity.setId(friend.getId());
-        friendEntity.setFirstName(friend.getFirstName());
-        friendEntity.setLastName(friend.getLastName());
-        friendEntity.setUser(UserEntity.fromDomain(friend.getUser()));
+        if (friend.getId() != null) friendEntity.setId(friend.getId());
+        if (friend.getFirstName() != null) friendEntity.setFirstName(friend.getFirstName());
+        if (friend.getLastName() != null) friendEntity.setLastName(friend.getLastName());
+        if (friend.getUser() != null) friendEntity.setUser(UserEntity.fromDomain(friend.getUser()));
         return friendEntity;
     }
 }
