@@ -1,4 +1,4 @@
-package com.assesment.users_service.infra.repositories;
+package com.assesment.users_service.infra.repositories.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.assesment.users_service.application.exception.UniqueConstraintException;
 import com.assesment.users_service.domain.User;
 import com.assesment.users_service.domain.ports.out.UserRepositoryPort;
+import com.assesment.users_service.infra.repositories.UserRepository;
 import com.assesment.users_service.infra.repositories.entities.FriendEntity;
 import com.assesment.users_service.infra.repositories.entities.UserEntity;
 

@@ -1,4 +1,4 @@
-package com.assesment.users_service.infra.repositories;
+package com.assesment.users_service.infra.repositories.impl;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.assesment.users_service.application.exception.UniqueConstraintException;
 import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
+import com.assesment.users_service.infra.repositories.FriendRepository;
 import com.assesment.users_service.infra.repositories.entities.FriendEntity;
 
 import jakarta.persistence.EntityNotFoundException;

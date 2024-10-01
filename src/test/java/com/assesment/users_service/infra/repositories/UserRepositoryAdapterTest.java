@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.assesment.users_service.application.exception.UniqueConstraintException;
 import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.User;
+import com.assesment.users_service.infra.repositories.impl.UserRepositoryAdapter;
 
 import jakarta.persistence.EntityNotFoundException;
 
