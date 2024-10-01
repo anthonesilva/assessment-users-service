@@ -1,6 +1,7 @@
 package com.assesment.users_service.application.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 
-// TODO: do refactoring using Optional
-// TODO: handle exceptions properly
-// TODO: better usage of jpa repository methods
 @Service
 @AllArgsConstructor
 public class UserService implements UsersUseCase {
@@ -37,7 +35,7 @@ public class UserService implements UsersUseCase {
 
     @Override
     @Transactional
-    public User addUser(User user) {
+    public User addUser(User user) throws Exception {
         User savedUser = userRepository.save(user);
         String avatar = findAvatar(savedUser.getId());
         savedUser.setAvatar(avatar);
@@ -45,19 +43,18 @@ public class UserService implements UsersUseCase {
     }    
 
     @Override
-    public User addFriend(Long userId, Friend friend) {
+    public User addFriendToUser(Long userId, Friend friend) throws Exception {
         User user = userRepository.findById(userId);
-        Friend savedFriend = friendRepository.save(friend);
-        user.addFriend(savedFriend);
+        user.addFriend(friend);
         return userRepository.save(user);
     }
 
     @Override
-    public User removeFriend(Long userId, Long friendId) {
+    public void removeFriendFromUser(Long userId, Long friendId) throws Exception{
         User user = userRepository.findById(userId);
-        Friend removedFriend = friendRepository.deleteById(friendId);
-        user.removeFriend(removedFriend);
-        return userRepository.save(user);
+        friendRepository.deleteById(friendId);
+        user.setFriends(user.getFriends().stream().filter(friend -> !friend.getId().equals(friendId)).collect(Collectors.toList()));
+        userRepository.save(user);
     }
 
     @Override
@@ -66,22 +63,21 @@ public class UserService implements UsersUseCase {
     }
 
     @Override
-    public User deleteById(Long userId) {
-        User user = userRepository.findById(userId);
-        if (user != null) {
-            return userRepository.deleteById(user.getId());
-        } else {
-            return null;
-        }        
+    public void deleteById(Long userId) {
+        try {
+            userRepository.deleteById(userId);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
-    public User update(User user) {
-        return userRepository.save(user);
+    public User update(Long userId, User user) {
+        return userRepository.update(userId, user);
     }
 
     @Override
-    public User addAvatar(Long userId) {
+    public User addAvatar(Long userId) throws Exception {
         User user = userRepository.findById(userId);
         String avatarUrl = findAvatar(userId);
         user.setAvatar(avatarUrl);
@@ -92,7 +88,7 @@ public class UserService implements UsersUseCase {
         String avatarUrl = avatarResource.findAvatarUrl(userId);
         
         if (avatarUrl == null) {
-            logger.log(LOG_LEVEL, String.format("[findAvatar] It has not been possible to find the avatar for user ID: %s", userId));
+            logger.log(LOG_LEVEL, String.format("[findAvatar] It has not been possible to find the avatar for user ID: %s.", userId));
             avatarUrl = DEFAULT_AVATAR;
         }
         return avatarUrl;

@@ -1,10 +1,14 @@
 package com.assesment.users_service.infra.repositories;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import com.assesment.users_service.application.exception.UniqueConstraintException;
 import com.assesment.users_service.domain.Friend;
 import com.assesment.users_service.domain.ports.out.FriendRepositoryPort;
+import com.assesment.users_service.infra.repositories.entities.FriendEntity;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Component
@@ -15,14 +19,24 @@ public class FriendRepositoryAdapter implements FriendRepositoryPort {
 
     @Override
     public Friend save(Friend friend) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        try {
+            FriendEntity friendEntity = FriendEntity.fromDomain(friend);
+            FriendEntity savedEntity = friendRepository.save(friendEntity);
+            return savedEntity.toDomain();
+        } catch (DataIntegrityViolationException ex) {
+            throw new UniqueConstraintException("Email already exists in the database.");
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
-    public Friend deleteById(Long friendId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    public void deleteById(Long friendId) {
+        if (friendRepository.existsById(friendId)) {
+            friendRepository.deleteById(friendId);
+        } else {
+            throw new EntityNotFoundException("Friend has not be found.");
+        }
     }
 
 }

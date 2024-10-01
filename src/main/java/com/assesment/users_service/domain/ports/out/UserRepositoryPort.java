@@ -6,7 +6,7 @@ import com.assesment.users_service.domain.User;
 
 public interface UserRepositoryPort {
 
-    User save(User user);
+    User save(User user) throws Exception;
 
     User findByEmail(String email);
 
@@ -16,8 +16,8 @@ public interface UserRepositoryPort {
 
     User findById(Long userId);
 
-    User deleteById(Long userId);
+    void deleteById(Long userId);
 
-    User update(User user);
+    User update(Long userId, User user);
 
 }

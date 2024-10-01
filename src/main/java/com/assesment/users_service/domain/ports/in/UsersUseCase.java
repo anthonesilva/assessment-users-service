@@ -7,20 +7,20 @@ import com.assesment.users_service.domain.User;
 
 public interface UsersUseCase {
 
-    User addUser(User user);
+    User addUser(User user) throws Exception;
 
-    User addFriend(Long userId, Friend friend);
+    User addFriendToUser(Long userId, Friend friend) throws Exception;
     
-    User removeFriend(Long userId, Long friendId);
+    void removeFriendFromUser(Long userId, Long friendId) throws Exception;
     
     List<User> findAll();
 
     User findById(Long userId);
 
-    User deleteById(Long userId);
+    void deleteById(Long userId);
 
-    User update(User user);
+    User update(Long userId, User user);
 
-    User addAvatar(Long userId);
+    User addAvatar(Long userId) throws Exception;
 
 }

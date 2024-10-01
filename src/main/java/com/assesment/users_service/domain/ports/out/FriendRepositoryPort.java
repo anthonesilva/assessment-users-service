@@ -6,6 +6,6 @@ public interface FriendRepositoryPort {
 
     Friend save(Friend friend);
 
-    Friend deleteById(Long friendId);
+    void deleteById(Long friendId) throws Exception;
 
 }
