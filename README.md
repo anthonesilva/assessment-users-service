@@ -6,7 +6,7 @@
 
 <h4 align="center">Users microservice to handle system's users</h4>
 
-<img src="https://github.com/anthonesilva/assessment-users-service/blob/feature/users-api/arch.svg">
+<img src="https://github.com/anthonesilva/assessment-users-service/blob/main/docs/arch.svg">
 <br>
 
 > **Note**  
@@ -22,12 +22,12 @@
 
 ## Main Technologies
 
-O projeto foi desenvolvido com as seguintes tecnologias:
+The project has been developed with the following technologies:
 
 * **Java 17**
 * **Spring Boot 3.3.4**
 * **Maven**
-* **JUnit 5**
+* **JUnit**
 * **MySQL**
 * **OAS3**
 * **Docker**
@@ -76,13 +76,13 @@ GET /users
 <h5>Finds an existing user by identifier</h5>
 
 ```bash
-GET /users
+GET /users/{userId}
 ```
 
 <h5>Creates users and friends list</h5>
 
 ```bash
-GET /users
+POST /users
 ```
 
 <h5>Adds a friend to an user</h5>
